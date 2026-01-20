@@ -10,15 +10,15 @@ const app = express();
 
 
 
+
 app.use(
   cors({
-    origin: "http://localhost:1234", // your React frontend
+    origin: "https://spiffy-naiad-981ec7.netlify.app", // your deployed frontend
     credentials: true,
-    methods: ["GET","POST","PUT","DELETE","OPTIONS"],
-    allowedHeaders: ["Content-Type","Authorization"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
-
 
 // Middleware
 app.use(express.json());
