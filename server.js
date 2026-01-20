@@ -8,16 +8,16 @@ connectDB();
 
 const app = express();
 
-// ✅ ALLOWED ORIGINS
+// Allowed origins
 const allowedOrigins = [
   "http://localhost:1234",
   "https://spiffy-naiad-981ec7.netlify.app"
 ];
 
-// ✅ SINGLE, CLEAN CORS CONFIG (TOP OF FILE)
+// SINGLE CORS CONFIG
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin) return callback(null, true); // Postman, curl
+    if (!origin) return callback(null, true);
 
     if (allowedOrigins.includes(origin)) {
       callback(null, true);
@@ -30,7 +30,7 @@ app.use(cors({
   credentials: true
 }));
 
-// ✅ PRE-FLIGHT SUPPORT
+// Preflight
 app.options("*", cors());
 
 // Middleware

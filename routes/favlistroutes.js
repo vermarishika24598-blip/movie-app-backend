@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Favlist = require("../models/Favlist");
+const Favlist = require("../models/favlist");
 const protect = require("../middleware/authmiddleware");
 
 // ===================== GET USER'S FAVOURITES =====================
