@@ -14,7 +14,7 @@ const allowedOrigins = [
   "https://spiffy-naiad-981ec7.netlify.app"
 ];
 
-// SINGLE CORS CONFIG
+// CORS config
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin) return callback(null, true);
@@ -29,9 +29,6 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true
 }));
-
-// Preflight
-app.options("*", cors());
 
 // Middleware
 app.use(express.json());
