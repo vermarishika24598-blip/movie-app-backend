@@ -16,19 +16,12 @@ const allowedOrigins = [
 
 // CORS config
 app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin) return callback(null, true);
-
-    if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("CORS not allowed"));
-    }
-  },
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true
+  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  credentials: true,
+  methods: "GET, POST, PUT, DELETE, PATCH, HEAD",
+  allowedHeaders: ['Authorization', 'Content-Type'],
 }));
+
 
 // Middleware
 app.use(express.json());
