@@ -8,15 +8,9 @@ connectDB();
 
 const app = express();
 
-// Allowed origins
-const allowedOrigins = [
-  "http://localhost:1234",
-  "https://spiffy-naiad-981ec7.netlify.app"
-];
-
 // CORS config
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: process.env.FRONTEND_URL || 'http://localhost:1234',
   credentials: true,
   methods: "GET, POST, PUT, DELETE, PATCH, HEAD",
   allowedHeaders: ['Authorization', 'Content-Type'],
