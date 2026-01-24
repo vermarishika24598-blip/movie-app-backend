@@ -9,7 +9,7 @@ connectDB();
 const app = express();
 
 app.use(cors({
-  origin: 'http://localhost:1234',
+  origin: process.env.FRONTEND_URL || 'http://localhost:1234'
   credentials: true,
   methods: 'GET, POST, PUT, DELETE, PATCH, HEAD',
   allowedHeaders: ['Authorization', 'Content-Type'],
