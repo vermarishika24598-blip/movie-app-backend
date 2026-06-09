@@ -16,10 +16,12 @@ connectDB();
 app.use(express.json());
 
 // ⚡ Bulletproof Dynamic CORS Configuration
-const allowedOrigins = [
-  "https://react-movie-explorer-bice.vercel.app", // Your Live Deployed Vercel Frontend
-  "http://localhost:1234",                        // Your Local Frontend (Parcel/Vite)
-];
+// ⚡ Bulletproof Dynamic CORS Configuration
+app.options("*", cors({
+  origin: "https://react-movie-explorer-w35l.vercel.app",
+  credentials: true
+}));
+
 
 app.use(
   cors({
