@@ -1,39 +1,64 @@
-require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const connectDB = require("./config/db");
+require("dotenv").config();
 
-// Connect to database
-connectDB();
+const authRoutes = require("./routes/authroutes");
+const watchlistRoutes = require("./routes/watchlistroutes");
+const favlistRoutes = require("./routes/favlistroutes");
 
 const app = express();
 
-app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:1234',
-  credentials: true,
-  methods: 'GET, POST, PUT, DELETE, PATCH, HEAD',
-  allowedHeaders: ['Authorization', 'Content-Type'],
-}));
+// Database Connection
+connectDB();
 
-
-
-// Middleware
+// Body Parser Middleware
 app.use(express.json());
 
-// Routes
-app.use("/api/auth", require("./routes/authroutes"));
-app.use("/api/watchlist", require("./routes/watchlistroutes"));
-app.use("/api/favlist", require("./routes/favlistroutes"));
+// ⚡ Bulletproof Dynamic CORS Configuration
+const allowedOrigins = [
+  "https://react-movie-explorer-bice.vercel.app", // Your Live Deployed Vercel Frontend
+  "http://localhost:1234",                        // Your Local Frontend (Parcel/Vite)
+];
 
-// Health check
-app.get("/api", (req, res) => {
-  res.send("Movie Clone Backend API is running 🚀");
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+      
+      // Clean and trim the incoming origin string just to be safe
+      const cleanOrigin = origin.trim();
+      
+      if (allowedOrigins.includes(cleanOrigin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
+// Root Route to check API Status
+app.get("/", (req, res) => {
+  res.send("Movie Explorer API is running smoothly...");
 });
 
-// Error handler
+// Routes Middleware
+app.use("/api/auth", authRoutes);
+app.use("/api/watchlist", watchlistRoutes);
+app.use("/api/favlist", favlistRoutes);
+
+// Global Error Handler for CORS or other internal issues
 app.use((err, req, res, next) => {
+  if (err.message === "Not allowed by CORS") {
+    return res.status(403).json({ message: "CORS Blocked: Origin not authorized." });
+  }
   console.error(err.stack);
-  res.status(500).json({ message: err.message || "Something went wrong" });
+  res.status(500).send("Something broke on the server!");
 });
 
 const PORT = process.env.PORT || 5000;
