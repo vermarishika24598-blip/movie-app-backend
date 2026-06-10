@@ -17,32 +17,27 @@ app.use(express.json());
 
 // ⚡ Bulletproof Dynamic CORS Configuration
 // ⚡ Bulletproof Dynamic CORS Configuration
-app.options("*", cors({
-  origin: "https://react-movie-explorer-w35l.vercel.app",
-  credentials: true
-}));
-
+const allowedOrigins = [
+  "https://react-movie-explorer-w35l.vercel.app",
+  "http://localhost:5173"
+];
 
 app.use(
   cors({
     origin: function (origin, callback) {
-      // Allow requests with no origin (like mobile apps or curl requests)
       if (!origin) return callback(null, true);
-      
-      // Clean and trim the incoming origin string just to be safe
-      const cleanOrigin = origin.trim();
-      
-      if (allowedOrigins.includes(cleanOrigin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
       }
+
+      callback(new Error("Not allowed by CORS"));
     },
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
+
 
 // Root Route to check API Status
 app.get("/", (req, res) => {
